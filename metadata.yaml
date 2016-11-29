@@ -1,19 +1,25 @@
 name: waf
-summary: <Fill in summary here>
-maintainer: Tilman Baumann Work <Tilman.Baumann.Work@zuse.tilman.baumann.name>
+summary: Apache mod_security Web Application Firewall
+maintainers: 
+  - Tilman Baumann <Tilman.Baumann@canonical.com>
+  - Matthias Britsch <mattias.britsch@telekom.de>
 description: |
-  <Multi-line description here>
+  Apache mod_security Web Application Firewall
 tags:
-  # Replace "misc" with one or more whitelisted tags from this list:
-  # https://jujucharms.com/docs/stable/authors-charm-metadata
-  - misc
+  - security
+series:
+  - xenial
 subordinate: false
 provides:
-  provides-relation:
-    interface: interface-name
+  website:
+    interface: http
+#FIXME  logs:
+#    interface: logs
 requires:
-  requires-relation:
-    interface: interface-name
-peers:
-  peer-relation:
-    interface: interface-name
+  balancer:
+    interface: http
+  backend:
+    interface: http
+#FIXME  logging:
+#    interface: syslog
+
