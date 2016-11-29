@@ -27,6 +27,7 @@ def started():
 
 
 @when('apache.available')
+@when_not('apache.started')
 def setup_apache():
     status_set('maintenance', 'Setting up Apache')
     # prepare apache stuff
