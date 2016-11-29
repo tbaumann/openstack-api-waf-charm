@@ -1,2 +1,4 @@
 includes: ['layer:basic', 'layer:apache2', 'interface:http']
 #FIXME interface:tls-certificates?
+
+repo: git@10.0.0.14:magellan/charms.git
