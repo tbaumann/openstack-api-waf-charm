@@ -1,4 +1,4 @@
-from charms.reactive import when, when_not, set_state
+from charms.reactive import when, when_not, set_state, hook, is_state
 from charmhelpers.core.hookenv import (
     open_port,
     close_port,
@@ -10,7 +10,7 @@ from charmhelpers.core.hookenv import (
     unit_get,
     status_set
 )
-from charmhelpers.core.host import service_restart, service_start, service_stop
+from charmhelpers.core.host import service_reload, service_start, service_stop
 
 
 @when('apache.start')
@@ -32,3 +32,14 @@ def setup_apache():
     status_set('maintenance', 'Setting up Apache')
     # prepare apache stuff
     set_state('apache.start')
+
+
+@when('apache.available')
+@hook('config-changed')
+def config_changed():
+    config = hookenv.config()
+    log("config-changed():")
+    # Do stuff
+    if is_state('apache.started'):
+        assert service_reload('apache2'), 'Failed to reload Apache'
+    status_set('maintenance', '')
