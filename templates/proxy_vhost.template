@@ -1,0 +1,41 @@
+Listen {{ port }}
+<VirtualHost *:{{ port }}>
+    # ModSecurity configuration
+    # Include /etc/modsecurity/modsecurity.conf
+    IncludeOptional /etc/modsecurity/*.conf
+
+    SSLEngine on
+    SSLProxyEngine on
+
+    # FIME SSL
+    # The public certificate and the private key
+    # for the client <--> reverse proxy
+    SSLCertificateFile /etc/apache2/ssl/{{ service }}-cert.pem
+    SSLCertificateKeyFile /etc/apache2/ssl/{{ service }}-key.pem
+    # The Certification Authority (CA) file.
+    # Who signed the certificates from the remote webservers.
+    SSLProxyCACertificateFile /etc/apache2/ssl/webservers-CA.pem
+
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyVia Off
+
+    <Proxy "balancer://{{ service }}">
+        Order deny,allow
+        Allow from all
+        {% for host in hosts %}
+        BalancerMember "https://{{host.hostname}}:{{ host.port }}{{ location }}"
+        {% endfor %}
+    </Proxy>
+
+    <Location "{{ location }}">
+        ProxyPass "balancer://{{ service }}"
+        ProxyPassReverse "balancer://{{ service }}"
+    </Location>
+
+    ErrorLog /var/log/apache2/{{ service }}_reverse_proxy.log
+    LogLevel warn
+    CustomLog /var/log/apache2/{{ service }}_reverse_proxy.log combined
+    ServerSignature Off
+
+</VirtualHost>

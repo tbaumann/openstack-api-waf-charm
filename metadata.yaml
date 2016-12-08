@@ -1,6 +1,6 @@
 name: waf
 summary: Apache mod_security Web Application Firewall
-maintainers: 
+maintainers:
   - Tilman Baumann <Tilman.Baumann@canonical.com>
   - Matthias Britsch <mattias.britsch@telekom.de>
 description: |
@@ -11,15 +11,42 @@ series:
   - xenial
 subordinate: false
 provides:
-  website:
+  cloudinformation:
     interface: http
-#FIXME  logs:
-#    interface: logs
+  compute:
+    interface: http
+  identity:
+    interface: http
+  image:
+    interface: http
+  metering:
+    interface: http
+  network:
+    interface: http
+  orchestration:
+    interface: http
+  volume:
+    interface: http
+  objectstorage:
+    interface: http
 requires:
-  balancer:
+  cloudinformation-backend:
     interface: http
-  backend:
+  compute-backend:
+    interface: http
+  identity-backend:
+    interface: http
+  image-backend:
+    interface: http
+  metering-backend:
+    interface: http
+  network-backend:
+    interface: http
+  orchestration-backend:
+    interface: http
+  volume-backend:
+    interface: http
+  objectstorage-backend:
     interface: http
 #FIXME  logging:
 #    interface: syslog
-
