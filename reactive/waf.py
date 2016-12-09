@@ -13,7 +13,8 @@ from charmhelpers.core.hookenv import (
     unit_get,
     status_set,
     in_relation_hook,
-    relation_types
+    relation_types,
+    relation_ids
 )
 from charmhelpers.core.host import service_reload, service_start, service_stop
 from charms.reactive.helpers import data_changed
@@ -47,7 +48,7 @@ def setup_apache():
     # Empty unused ports.conf
     if os.path.exists('/etc/apache2/ports.conf'):
         open('/etc/apache2/ports.conf', 'w').write('')
-    status_set('maintenance', 'Waiting for relatioons to join')
+    status_set('waiting', 'Waiting for relatioons to join')
     set_state('apache.start')
 
 
@@ -67,24 +68,37 @@ def setup_backend(backend):
     service = relation_name[:relation_name.rindex('-backend')]  # Slice -backend
     log("Backend {} available".format(service))
     write_vhost(backend, service)
-    # FIXME open port
+    open_port(orig_config_get()[service + '_port'], protocol='TCP')
+
+    # FIXME this is not right. This sets only the conversations with joined units I think
+    for id in relation_ids(service):
+        relation_set(relation_id=id, relation_settings={
+            'hostname': unit_get('private-address'),
+            'port': orig_config_get()[service + '_port'],
+        })
     # Set available once the first relation joined. Simple but works
     set_state('waf.available')
 
 
-
+# Backend relation departed. Delte vhost file
 @hook('{requires:http}-relation-{departed,broken}')
 def stop_backend(backend):
     relation_name = backend.relation_name
     service = relation_name[:relation_name.rindex('-backend')]  # Slice -backend
-    log("Stop backend {}".format(service))
-    try:
-        os.remove('/etc/apache2/sites-enabled/{}.conf'.format(service))
-    except FileNotFoundError:
-        pass
-    set_state('apache.changed')
+    log('A unit has left {}'.format(service))
+    if(hosts_for_backend(backend)):
+        write_vhost(backend, service)
+    else:
+        log("All units are gone. Stopping backend {}".format(service))
+        try:
+            os.remove('/etc/apache2/sites-enabled/{}.conf'.format(service))
+        except FileNotFoundError:
+            pass
+        close_port(orig_config_get()[service + '_port'], protocol='TCP')
+        set_state('apache.changed')
 
 
+# This will save all config options into files
 @when('config.changed')
 def write_waf_config():
     write_file_from_option(
@@ -117,6 +131,8 @@ def write_waf_config():
 
 
 # Helper functions
+
+# Get a list of all service names
 def get_all_servicenames():
     return map(lambda x: x[:x.rindex('-backend')],
                filter(lambda t: t.endswith('-backend'),
@@ -125,6 +141,7 @@ def get_all_servicenames():
               )
 
 
+# Take a config field by name and write it into a file
 def write_file_from_option(path, option_name, remove_if_empty=False):
     config = orig_config_get()
     directory = os.path.dirname(path)
@@ -146,13 +163,13 @@ def write_file_from_option(path, option_name, remove_if_empty=False):
     set_state('apache.changed')
 
 
+# FIXME Will not be triggered when port is changed
+# Write a vhost file when the backend becomes available
 def write_vhost(backend, service):
     config = extract_service_config(service, orig_config_get())
     context = {
         'service': service,
-        'hosts': reduce(
-           lambda x, y: x + y, map(
-                lambda srv: srv['hosts'], backend.services())),  # Flatten hosts in one list
+        'hosts': hosts_for_backend(backend)
     }
     context.update(config)
     if not data_changed(service + '.vhost', context):
@@ -168,6 +185,12 @@ def write_vhost(backend, service):
     set_state('apache.changed')
 
 
+def hosts_for_backend(backend):
+        return reduce(
+           lambda x, y: x + y, map(
+                lambda srv: srv['hosts'], backend.services()), []),  # Flatten hosts in one list
+
+# Extract config keys prefixed with $service_ and stripping service name in result
 def extract_service_config(service, config):
     result = {}
     for key in filter(lambda k: k.startswith(service + '_'), config.keys()):
