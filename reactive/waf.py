@@ -107,7 +107,8 @@ def write_waf_config():
     write_file_from_option(
         '/etc/modsecurity/waf.conf',
         'securityrules',
-        remove_if_empty=True
+        remove_if_empty=True,
+        banner=True
         )
     write_file_from_option(
         '/etc/apache2/ssl/webservers-CA.pem',
@@ -117,12 +118,14 @@ def write_waf_config():
         write_file_from_option(
             '/etc/apache2/waf/{}.conf'.format(service),
             service + '_overwrite',
-            remove_if_empty=True
+            remove_if_empty=True,
+            banner=True
             )
         write_file_from_option(
             '/etc/modsecurity/{}/waf.conf'.format(service),
             service + '_securityrules',
-            remove_if_empty=True
+            remove_if_empty=True,
+            banner=True
             )
         write_file_from_option(
             '/etc/apache2/ssl/{}-cert.pem'.format(service),
@@ -146,7 +149,7 @@ def get_all_servicenames():
 
 
 # Take a config field by name and write it into a file
-def write_file_from_option(path, option_name, remove_if_empty=False):
+def write_file_from_option(path, option_name, remove_if_empty=False, banner=False):
     config = orig_config_get()
     directory = os.path.dirname(path)
     if not os.path.exists(directory):
@@ -163,6 +166,8 @@ def write_file_from_option(path, option_name, remove_if_empty=False):
         return
     log('Writing {}'.format(path))
     with open(path, 'w') as f:
+        if banner:
+            f.write(juju_banner())
         f.write(str(base64.b64decode(config[option_name]), 'utf-8'))
     set_state('apache.changed')
 
@@ -213,3 +218,17 @@ def enable_module(module=None):
     if return_value != 0:
         return False
     set_state('apache.changed')
+
+
+def juju_banner():
+    return ('''#
+#    "             "
+#  mmm   m   m   mmm   m   m
+#    #   #   #     #   #   #
+#    #   #   #     #   #   #
+#    #   "mm"#     #   "mm"#
+#    #             #
+#  ""            ""
+# This file is managed by Juju. Do not make local changes.
+#
+''')

@@ -1,3 +1,14 @@
+#
+#    "             "
+#  mmm   m   m   mmm   m   m
+#    #   #   #     #   #   #
+#    #   #   #     #   #   #
+#    #   "mm"#     #   "mm"#
+#    #             #
+#  ""            ""
+# This file is managed by Juju. Do not make local changes.
+#
+
 Listen {{ port }}
 <VirtualHost *:{{ port }}>
     # ModSecurity configuration
