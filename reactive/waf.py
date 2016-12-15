@@ -93,6 +93,14 @@ def stop_backend(backend):
         set_state('apache.changed')
 
 
+# Frontend became available. Set the port in the conversation.
+@hook('{provides:http}-relation-{joined,changed}')
+def setup_frontend(frontend):
+    config = orig_config_get()
+    relation_name = frontend.relation_name
+    frontend.configure(config[relation_name + '_port'])
+
+
 # This will save all config options into files
 @when('config.changed')
 def write_waf_config():
