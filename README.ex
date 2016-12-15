@@ -1,54 +1,54 @@
 # Overview
 
-Describe the intended usage of this charm and anything unique about how this
-charm relates to others here.
+Web Application Firewall (WAF) for openstack http API and services.
 
-This README will be displayed in the Charm Store, it should be either Markdown
-or RST. Ideal READMEs include instructions on how to use the charm, expected
-usage, and charm features that your audience might be interested in. For an
-example of a well written README check out Hadoop:
-http://jujucharms.com/charms/precise/hadoop
-
-Use this as a Markdown reference if you need help with the formatting of this
-README: http://askubuntu.com/editing-help
-
-This charm provides [service][]. Add a description here of what the service
-itself actually does.
-
-Also remember to check the [icon guidelines][] so that your charm looks good
-in the Juju GUI.
+Based on Apache_Mod_Security.
 
 # Usage
+
 
 Step by step instructions on using the charm:
 
 juju deploy servicename
 
-and so on. If you're providing a web service or something that the end user
-needs to go to, tell them here, especially if you're deploying a service that
-might listen to a non-default port.
 
-You can then browse to http://ip-address to configure the service.
+Then add the relations which are required.
+All inactive relations will not run and don't need to be configured.
+A relation that is configured will need to be fully configured before that is done. (SSL settings)
+
+juju add-relation service-backend service
+
 
 ## Scale out Usage
 
-If the charm has any recommendations for running at scale, outline them in
-examples here. For example if you have a memcached relation that improves
-performance, mention it here.
+This charm can be scaled if a load balancer is placed in front of it.
+
+The backends can be scaled too. The proxy endpoints will be added as required.
 
 ## Known Limitations and Issues
 
-This not only helps users but gives people a place to start if they want to help
-you add features to your charm.
+Changes on port numbers will not be correctly handled after a relation was sucessfully set up.
+The relation will need to re-enabled or changed to make the change stick.
 
 # Configuration
 
-The configuration options will be listed on the charm store, however If you're
-making assumptions or opinionated decisions in the charm (like setting a default
-administrator password), you should detail that here so the user knows how to
-change it immediately, etc.
+There are two global options:
 
-# Contact Information
+* securityrules (Base64)
+* ssl_webserver_ca (Base64)
+
+Every service has a set of config options prefixed with the service name.
+They should have sensible defaults. But can be changed.
+
+* service_backend_proto Protocol to use towards the backend. http or https
+* service_location Path which will be passed through for this service
+* service_overwrite Optional apache config snipped included in the VHost context (Base64)
+* service_port Portnumer. The same for frontend and backend
+* service_securityrules Apache include for the service specific security rules (Base64)
+* service_ssl_cert Base64 encoded certificate for the frontend
+* service_ssl_key Base64 encoded ssl key for the frontend
+
+# Contact Information FIXME
 
 Though this will be listed in the charm store itself don't assume a user will
 know that, so include that information here:
