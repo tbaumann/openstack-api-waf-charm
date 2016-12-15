@@ -45,6 +45,7 @@ def setup_apache():
     enable_module('rewrite')
     enable_module('proxy_http')
     enable_module('proxy_html')
+    enable_module('ssl')
     # Empty unused ports.conf
     if os.path.exists('/etc/apache2/ports.conf'):
         open('/etc/apache2/ports.conf', 'w').write('')
@@ -184,6 +185,7 @@ def hosts_for_backend(backend):
         return reduce(
            lambda x, y: x + y, map(
                 lambda srv: srv['hosts'], backend.services()), []),  # Flatten hosts in one list
+
 
 # Extract config keys prefixed with $service_ and stripping service name in result
 def extract_service_config(service, config):
