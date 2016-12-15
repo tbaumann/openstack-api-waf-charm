@@ -24,7 +24,7 @@ Listen {{ port }}
         Order deny,allow
         Allow from all
         {% for host in hosts %}
-        BalancerMember "https://{{host.hostname}}:{{ host.port }}{{ location }}"
+        BalancerMember "{{ backend_proto }}://{{host.hostname}}:{{ host.port }}{{ location }}"
         {% endfor %}
     </Proxy>
 

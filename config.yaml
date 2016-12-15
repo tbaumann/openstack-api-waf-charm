@@ -1,225 +1,261 @@
 options:
-  securityrules:
+  cloudinformation_backend_proto:
+    default: http
+    description: 'cloudinformation backend protocol [http|https]'
     type: string
-    default: ""
-    description: "Global security rules (Base64)"
-  ssl_webserver_ca:
-    type: string
-    default: ""
-    description: "Global CA of all backend webservers (Base64)"
-  cloudinformation_overwrite:
-    type: string
-    default: ""
-    description: "cloudinformation specific apache overwrite (Base64)"
-  cloudinformation_port:
-    type: int
-    default: 8000
-    description: "cloudinformation frontend port"
   cloudinformation_location:
+    default: /v1/
+    description: cloudinformation path component
     type: string
-    default: "/v1/"
-    description: "cloudinformation path component"
+  cloudinformation_overwrite:
+    default: ''
+    description: cloudinformation specific apache overwrite (Base64)
+    type: string
+  cloudinformation_port:
+    default: 8000
+    description: cloudinformation frontend port
+    type: int
   cloudinformation_securityrules:
+    default: ''
+    description: cloudinformation specific security rules (Base64)
     type: string
-    default: ""
-    description: "cloudinformation specific security rules (Base64)"
   cloudinformation_ssl_cert:
+    default: ''
+    description: cloudinformation frontend SSL certificate (Base64)
     type: string
-    default: ""
-    description: "cloudinformation frontend SSL certificate (Base64)"
   cloudinformation_ssl_key:
+    default: ''
+    description: cloudinformation frontend SSL key (Base64)
     type: string
-    default: ""
-    description: "cloudinformation frontend SSL key (Base64)"
-  network_port:
-    type: int
-    default: 9696
-    description: "network frontend port"
-  network_location:
+  compute_backend_proto:
+    default: http
+    description: 'compute backend protocol [http|https]'
     type: string
-    default: "/"
-    description: "network path component"
-  network_overwrite:
-    type: string
-    default: ""
-    description: "network specific apache overwrite (Base64)"
-  network_securityrules:
-    type: string
-    default: ""
-    description: "network specific security rules"
-  network_ssl_cert:
-    type: string
-    default: ""
-    description: "network frontend SSL certificate (Base64)"
-  network_ssl_key:
-    type: string
-    default: ""
-    description: "network frontend SSL key (Base64)"
-  identity_port:
-    type: int
-    default: 5000
-    description: "identity frontend port"
-  identity_location:
-    type: string
-    default: "/v2.0/"
-    description: "identity path component"
-  identity_overwrite:
-    type: string
-    default: ""
-    description: "identity specific apache overwrite (Base64)"
-  identity_securityrules:
-    type: string
-    default: ""
-    description: "identity specific security rules"
-  identity_ssl_cert:
-    type: string
-    default: ""
-    description: "identity frontend SSL certificate (Base64)"
-  identity_ssl_key:
-    type: string
-    default: ""
-    description: "identity frontend SSL key (Base64)"
-  metering_port:
-    type: int
-    default: 8777
-    description: "metering frontend port"
-  metering_location:
-    type: string
-    default: "/"
-    description: "metering path component"
-  metering_overwrite:
-    type: string
-    default: ""
-    description: "metering specific apache overwrite (Base64)"
-  metering_securityrules:
-    type: string
-    default: ""
-    description: "metering specific security rules"
-  metering_ssl_cert:
-    type: string
-    default: ""
-    description: "metering frontend SSL certificate (Base64)"
-  metering_ssl_key:
-    type: string
-    default: ""
-    description: "metering frontend SSL key (Base64)"
-  volume_port:
-    type: int
-    default: 8776
-    description: "volume frontend port"
-  volume_location:
-    type: string
-    default: "/v1/acb87b9319bc414db8d9ad5b0dbe1aa4/"
-    description: "volume path component"
-  volume_overwrite:
-    type: string
-    default: ""
-    description: "volume specific apache overwrite (Base64)"
-  volume_securityrules:
-    type: string
-    default: ""
-    description: "volume specific security rules"
-  volume_ssl_cert:
-    type: string
-    default: ""
-    description: "volume frontend SSL certificate (Base64)"
-  volume_ssl_key:
-    type: string
-    default: ""
-    description: "volume frontend SSL key (Base64)"
-  image_port:
-    type: int
-    default: 9292
-    description: "image frontend port"
-  image_location:
-    type: string
-    default: "/"
-    description: "image path component"
-  image_overwrite:
-    type: string
-    default: ""
-    description: "image specific apache overwrite (Base64)"
-  image_securityrules:
-    type: string
-    default: ""
-    description: "image specific security rules"
-  image_ssl_cert:
-    type: string
-    default: ""
-    description: "image frontend SSL certificate (Base64)"
-  image_ssl_key:
-    type: string
-    default: ""
-    description: "image frontend SSL key (Base64)"
-  compute_port:
-    type: int
-    default: 8774
-    description: "compute frontend port"
   compute_location:
+    default: /v2/acb87b9319bc414db8d9ad5b0dbe1aa4/
+    description: compute path component
     type: string
-    default: "/v2/acb87b9319bc414db8d9ad5b0dbe1aa4/"
-    description: "compute path component"
   compute_overwrite:
+    default: ''
+    description: compute specific apache overwrite (Base64)
     type: string
-    default: ""
-    description: "compute specific apache overwrite (Base64)"
+  compute_port:
+    default: 8774
+    description: compute frontend port
+    type: int
   compute_securityrules:
+    default: ''
+    description: compute specific security rules
     type: string
-    default: ""
-    description: "compute specific security rules"
   compute_ssl_cert:
+    default: ''
+    description: compute frontend SSL certificate (Base64)
     type: string
-    default: ""
-    description: "compute frontend SSL certificate (Base64)"
   compute_ssl_key:
+    default: ''
+    description: compute frontend SSL key (Base64)
     type: string
-    default: ""
-    description: "compute frontend SSL key (Base64)"
-  orchestration_port:
+  identity_backend_proto:
+    default: http
+    description: 'identity backend protocol [http|https]'
+    type: string
+  identity_location:
+    default: /v2.0/
+    description: identity path component
+    type: string
+  identity_overwrite:
+    default: ''
+    description: identity specific apache overwrite (Base64)
+    type: string
+  identity_port:
+    default: 5000
+    description: identity frontend port
     type: int
-    default: 8004
-    description: "orchestration frontend port"
-  orchestration_location:
+  identity_securityrules:
+    default: ''
+    description: identity specific security rules
     type: string
-    default: "/v1/acb87b9319bc414db8d9ad5b0dbe1aa4/"
-    description: "orchestration path component"
-  orchestration_overwrite:
+  identity_ssl_cert:
+    default: ''
+    description: identity frontend SSL certificate (Base64)
     type: string
-    default: ""
-    description: "orchestration specific apache overwrite (Base64)"
-  orchestration_securityrules:
+  identity_ssl_key:
+    default: ''
+    description: identity frontend SSL key (Base64)
     type: string
-    default: ""
-    description: "orchestration specific security rules"
-  orchestration_ssl_cert:
+  image_backend_proto:
+    default: http
+    description: 'image backend protocol [http|https]'
     type: string
-    default: ""
-    description: "orchestration frontend SSL certificate (Base64)"
-  orchestration_ssl_key:
+  image_location:
+    default: /
+    description: image path component
     type: string
-    default: ""
-    description: "orchestration frontend SSL key (Base64)"
-  objectstorage_overwrite:
+  image_overwrite:
+    default: ''
+    description: image specific apache overwrite (Base64)
     type: string
-    default: ""
-    description: "objectstorage specific apache overwrite (Base64)"
-  objectstorage_port:
+  image_port:
+    default: 9292
+    description: image frontend port
     type: int
-    default: 443
-    description: "objectstorage frontend port"
+  image_securityrules:
+    default: ''
+    description: image specific security rules
+    type: string
+  image_ssl_cert:
+    default: ''
+    description: image frontend SSL certificate (Base64)
+    type: string
+  image_ssl_key:
+    default: ''
+    description: image frontend SSL key (Base64)
+    type: string
+  metering_backend_proto:
+    default: http
+    description: 'metering backend protocol [http|https]'
+    type: string
+  metering_location:
+    default: /
+    description: metering path component
+    type: string
+  metering_overwrite:
+    default: ''
+    description: metering specific apache overwrite (Base64)
+    type: string
+  metering_port:
+    default: 8777
+    description: metering frontend port
+    type: int
+  metering_securityrules:
+    default: ''
+    description: metering specific security rules
+    type: string
+  metering_ssl_cert:
+    default: ''
+    description: metering frontend SSL certificate (Base64)
+    type: string
+  metering_ssl_key:
+    default: ''
+    description: metering frontend SSL key (Base64)
+    type: string
+  network_backend_proto:
+    default: http
+    description: 'network backend protocol [http|https]'
+    type: string
+  network_location:
+    default: /
+    description: network path component
+    type: string
+  network_overwrite:
+    default: ''
+    description: network specific apache overwrite (Base64)
+    type: string
+  network_port:
+    default: 9696
+    description: network frontend port
+    type: int
+  network_securityrules:
+    default: ''
+    description: network specific security rules
+    type: string
+  network_ssl_cert:
+    default: ''
+    description: network frontend SSL certificate (Base64)
+    type: string
+  network_ssl_key:
+    default: ''
+    description: network frontend SSL key (Base64)
+    type: string
+  objectstorage_backend_proto:
+    default: http
+    description: 'objectstorage backend protocol [http|https]'
+    type: string
   objectstorage_location:
+    default: /
+    description: objectstorage path component
     type: string
-    default: "/"
-    description: "objectstorage path component"
+  objectstorage_overwrite:
+    default: ''
+    description: objectstorage specific apache overwrite (Base64)
+    type: string
+  objectstorage_port:
+    default: 443
+    description: objectstorage frontend port
+    type: int
   objectstorage_securityrules:
+    default: ''
+    description: objectstorage specific security rules
     type: string
-    default: ""
-    description: "objectstorage specific security rules"
   objectstorage_ssl_cert:
+    default: ''
+    description: objectstorage frontend SSL certificate (Base64)
     type: string
-    default: ""
-    description: "objectstorage frontend SSL certificate (Base64)"
   objectstorage_ssl_key:
+    default: ''
+    description: objectstorage frontend SSL key (Base64)
     type: string
-    default: ""
-    description: "objectstorage frontend SSL key (Base64)"
+  orchestration_backend_proto:
+    default: http
+    description: 'orchestration backend protocol [http|https]'
+    type: string
+  orchestration_location:
+    default: /v1/acb87b9319bc414db8d9ad5b0dbe1aa4/
+    description: orchestration path component
+    type: string
+  orchestration_overwrite:
+    default: ''
+    description: orchestration specific apache overwrite (Base64)
+    type: string
+  orchestration_port:
+    default: 8004
+    description: orchestration frontend port
+    type: int
+  orchestration_securityrules:
+    default: ''
+    description: orchestration specific security rules
+    type: string
+  orchestration_ssl_cert:
+    default: ''
+    description: orchestration frontend SSL certificate (Base64)
+    type: string
+  orchestration_ssl_key:
+    default: ''
+    description: orchestration frontend SSL key (Base64)
+    type: string
+  securityrules:
+    default: ''
+    description: Global security rules (Base64)
+    type: string
+  ssl_webserver_ca:
+    default: ''
+    description: Global CA of all backend webservers (Base64)
+    type: string
+  volume_backend_proto:
+    default: http
+    description: 'volume backend protocol [http|https]'
+    type: string
+  volume_location:
+    default: /v1/acb87b9319bc414db8d9ad5b0dbe1aa4/
+    description: volume path component
+    type: string
+  volume_overwrite:
+    default: ''
+    description: volume specific apache overwrite (Base64)
+    type: string
+  volume_port:
+    default: 8776
+    description: volume frontend port
+    type: int
+  volume_securityrules:
+    default: ''
+    description: volume specific security rules
+    type: string
+  volume_ssl_cert:
+    default: ''
+    description: volume frontend SSL certificate (Base64)
+    type: string
+  volume_ssl_key:
+    default: ''
+    description: volume frontend SSL key (Base64)
+    type: string
