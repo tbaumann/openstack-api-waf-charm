@@ -70,12 +70,6 @@ def setup_backend(backend):
     write_vhost(backend, service)
     open_port(orig_config_get()[service + '_port'], protocol='TCP')
 
-    # FIXME this is not right. This sets only the conversations with joined units I think
-    for id in relation_ids(service):
-        relation_set(relation_id=id, relation_settings={
-            'hostname': unit_get('private-address'),
-            'port': orig_config_get()[service + '_port'],
-        })
     # Set available once the first relation joined. Simple but works
     set_state('waf.available')
 
@@ -103,7 +97,8 @@ def stop_backend(backend):
 def write_waf_config():
     write_file_from_option(
         '/etc/modsecurity/waf.conf',
-        'securityrules'
+        'securityrules',
+        remove_if_empty=True
         )
     write_file_from_option(
         '/etc/apache2/ssl/webservers-CA.pem',
@@ -147,15 +142,15 @@ def write_file_from_option(path, option_name, remove_if_empty=False):
     directory = os.path.dirname(path)
     if not os.path.exists(directory):
         os.makedirs(directory)
+    if not data_changed('waf_{}'.format(option_name), config[option_name]):
+        log("No changes for {}".format(option_name))
+        return
     if not config[option_name] and remove_if_empty:
         log("Not writing {} because {} is empty".format(path, option_name))
         try:
             os.remove(path)
         except FileNotFoundError:
             pass
-        return
-    if not data_changed('waf_{}'.format(option_name), config[option_name]):
-        log("No changes for {}".format(option_name))
         return
     log('Writing {}'.format(path))
     with open(path, 'w') as f:
