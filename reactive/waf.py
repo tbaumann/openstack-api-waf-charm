@@ -45,6 +45,8 @@ def setup_apache():
     enable_module('rewrite')
     enable_module('proxy_http')
     enable_module('proxy_html')
+    enable_module('proxy_balancer')
+    enable_module('lbmethod_byrequests')
     enable_module('ssl')
     enable_module('syslog')
     # Empty unused ports.conf
