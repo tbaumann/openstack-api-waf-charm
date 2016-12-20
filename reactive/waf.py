@@ -85,6 +85,7 @@ def stop_backend(backend):
     if(hosts_for_backend(backend)):
         write_vhost(backend, service)
     else:
+        data_changed(service + '.vhost', {})  # Force data changed
         log("All units are gone. Stopping backend {}".format(service))
         try:
             os.remove('/etc/apache2/sites-enabled/{}.conf'.format(service))
@@ -177,10 +178,11 @@ def write_file_from_option(path, option_name, remove_if_empty=False, banner=Fals
 # Write a vhost file when the backend becomes available
 def write_vhost(backend, service):
     config = extract_service_config(service, orig_config_get())
+    hosts = hosts_for_backend(backend)
     context = {
         'service': service,
         'use_syslog': orig_config_get()['use_syslog'],
-        'hosts': hosts_for_backend(backend)
+        'hosts': hosts
     }
     context.update(config)
     if not data_changed(service + '.vhost', context):
@@ -200,7 +202,7 @@ def write_vhost(backend, service):
 def hosts_for_backend(backend):
         return reduce(
            lambda x, y: x + y, map(
-                lambda srv: srv['hosts'], backend.services()), []),
+                lambda srv: srv['hosts'], backend.services()), [])
 
 
 # Extract config keys prefixed with $service_
