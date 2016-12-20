@@ -24,7 +24,7 @@ Listen {{ port }}
     SSLCertificateFile /etc/apache2/ssl/{{ service }}-cert.pem
     SSLCertificateKeyFile /etc/apache2/ssl/{{ service }}-key.pem
 
-    {%- if backend_proto is equalto "https" %}
+    {% if backend_proto is equalto "https" %}
     # The Certification Authority (CA) file.
     # Who signed the certificates from the remote webservers.
     SSLProxyCACertificateFile /etc/apache2/ssl/webservers-CA.pem
