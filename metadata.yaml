@@ -9,6 +9,7 @@ tags:
   - security
 series:
   - xenial
+  - trusty
 subordinate: false
 provides:
   cloudinformation:
