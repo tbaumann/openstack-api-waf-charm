@@ -44,9 +44,16 @@ Listen {{ port }}
         ProxyPassReverse "balancer://{{ service }}"
     </Location>
 
-    ErrorLog /var/log/apache2/{{ service }}_reverse_proxy.log
+
     LogLevel warn
-    CustomLog /var/log/apache2/{{ service }}_reverse_proxy.log combined
     ServerSignature Off
+
+    {% if use_syslog -%}
+    ErrorLog  "syslog"
+    CustomLog "syslog" combined
+    {%- else -%}
+    CustomLog /var/log/apache2/{{ service }}_reverse_proxy.log combined
+    ErrorLog /var/log/apache2/{{ service }}_reverse_proxy.log
+    {%- endif %}
 
 </VirtualHost>

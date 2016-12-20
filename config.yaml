@@ -231,6 +231,10 @@ options:
     default: ''
     description: Global CA of all backend webservers (Base64)
     type: string
+  use_syslog:
+    default: false
+    description: Use Syslog
+    type: boolean
   volume_backend_proto:
     default: http
     description: 'volume backend protocol [http|https]'

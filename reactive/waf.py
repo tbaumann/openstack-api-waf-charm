@@ -46,6 +46,7 @@ def setup_apache():
     enable_module('proxy_http')
     enable_module('proxy_html')
     enable_module('ssl')
+    enable_module('syslog')
     # Empty unused ports.conf
     if os.path.exists('/etc/apache2/ports.conf'):
         open('/etc/apache2/ports.conf', 'w').write('')
@@ -178,6 +179,7 @@ def write_vhost(backend, service):
     config = extract_service_config(service, orig_config_get())
     context = {
         'service': service,
+        'use_syslog': orig_config_get()['use_syslog'],
         'hosts': hosts_for_backend(backend)
     }
     context.update(config)
@@ -194,13 +196,15 @@ def write_vhost(backend, service):
     set_state('apache.changed')
 
 
+# Flatten hosts in one list
 def hosts_for_backend(backend):
         return reduce(
            lambda x, y: x + y, map(
-                lambda srv: srv['hosts'], backend.services()), []),  # Flatten hosts in one list
+                lambda srv: srv['hosts'], backend.services()), []),
 
 
-# Extract config keys prefixed with $service_ and stripping service name in result
+# Extract config keys prefixed with $service_
+# and stripping service name in result
 def extract_service_config(service, config):
     result = {}
     for key in filter(lambda k: k.startswith(service + '_'), config.keys()):

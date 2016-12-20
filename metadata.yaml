@@ -48,5 +48,3 @@ requires:
     interface: http
   objectstorage-backend:
     interface: http
-#FIXME  logging:
-#    interface: syslog
